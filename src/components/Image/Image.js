@@ -12,8 +12,8 @@ class Image extends Component {
 
     this.state = {
       imageUrl: localStorage.getItem('ImageUrl'),
-      authorName: localStorage.getItem('ImageAuthorName'),
       authorLink: localStorage.getItem('ImageAuthorLink'),
+      authorName: localStorage.getItem('ImageAuthorName'),
       cache: localStorage.getItem('ImageCache'),
       isLoading: false,
       hasError: false,
@@ -65,7 +65,7 @@ class Image extends Component {
    * @param data
    */
   setImageFromData(data) {
-    const url = data.data.urls.full;
+    const url = data.data.urls.custom;
     const author = data.data.user;
     const now = moment().format();
 
@@ -78,7 +78,8 @@ class Image extends Component {
     this.setState({
       isLoading: false,
       imageUrl: url,
-      imageAuthor: author,
+      authorLink: author.links.html,
+      authorName: author.name,
       cache: now,
     })
   }
@@ -97,7 +98,7 @@ class Image extends Component {
     }
 
     if (this.state.isLoading) {
-      return <p>Loading...</p>
+      return null;
     }
 
     return (
