@@ -1,10 +1,9 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "version": "0.2",
+  "manifest_version": 2,
+  "name": "New Tab App",
+  "version": "1.0.0",
   "incognito": "split",
   "chrome_url_overrides": {
     "newtab": "index.html"
-  },
-  "manifest_version": 2
+  }
 }
