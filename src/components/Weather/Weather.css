@@ -1,0 +1,42 @@
+.weather {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.14);
+    text-align: right;
+}
+
+.weather__icon {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+}
+
+.weather__list {
+    margin: 0.5em 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: small;
+}
+
+.weather__list li {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.weather__list li + li {
+    margin: 0.25em 0 0;
+}
+
+.weather__icon {
+    margin-left: 0.5em;
+}
+
+.weather__temp--low {
+    opacity: 0.5;
+}
+
+.weather__temp + .weather__temp {
+    margin-left: 0.5em;
+}
