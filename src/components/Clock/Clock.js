@@ -45,22 +45,10 @@ class Clock extends Component {
     }
   }
 
-  renderGreeting() {
-    if (this.state.time !== null) {
-      const hour = parseInt(this.state.time.substring(0, 2), 10);
-
-      if (hour > 0 && hour < 12) {
-        return 'Good Morning';
-      }
-    }
-    return null;
-  }
-
   render() {
     return (
       <div className="clock">
         {this.state.time}
-        {this.renderGreeting()}
       </div>
     );
   }
