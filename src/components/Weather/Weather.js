@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 
+import {weather, weatherCache, weatherCity} from '../../actions/weather';
 import './Weather.css';
 
 import clear from './icons/01d.svg';
@@ -14,7 +16,21 @@ import thunderStorm from './icons/11d.svg';
 import snow from './icons/13d.svg';
 import mist from './icons/50d.svg';
 
-const WEATHER_API = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=Auckland&mode=json&units=metric&cnt=7&appid=a24a174c4ceab5f6c8462cbf4b161d0e';
+const mapStateToProps = (state) => {
+  return {
+    weather: state.weather,
+    weatherCache: state.weatherCache,
+    weatherCity: state.weatherCity,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setWeather: (list) => dispatch(weather(list)),
+    setWeatherCache: (string) => dispatch(weatherCache(string)),
+    setWeatherCity: (string) => dispatch(weatherCity(string)),
+  };
+};
 
 class Weather extends Component {
   /**
@@ -87,12 +103,6 @@ class Weather extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      cache: localStorage.getItem('WeatherCache'),
-      list: JSON.parse(localStorage.getItem('WeatherList')),
-      city: localStorage.getItem('WeatherCity'),
-    }
   }
 
   componentDidMount() {
@@ -105,7 +115,7 @@ class Weather extends Component {
    * @returns {boolean}
    */
   isCacheActive() {
-    const cache = this.state.cache;
+    const cache = this.props.weatherCache;
 
     // If there is no cache.
     if (typeof cache === 'undefined' || cache === null) {
@@ -118,22 +128,18 @@ class Weather extends Component {
 
   fetchWeatherData() {
     if (!this.isCacheActive()) {
+      const WEATHER_API = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${this.props.weatherCity}&mode=json&units=metric&cnt=7&appid=a24a174c4ceab5f6c8462cbf4b161d0e`;
       axios.get(WEATHER_API)
         .then(response => {
           const now = moment().format();
           const city = response.data.city.name;
           const list = response.data.list;
 
-          console.log(response);
-          localStorage.setItem('WeatherCache', now);
-          localStorage.setItem('WeatherCity', city);
-          localStorage.setItem('WeatherList', JSON.stringify(list));
+          console.log(list);
 
-          this.setState({
-            cache: now,
-            city,
-            list,
-          });
+          this.props.setWeatherCache(now);
+          this.props.setWeatherCity(city);
+          this.props.setWeather(list);
         })
         .catch(err => {
           console.log(err);
@@ -142,10 +148,10 @@ class Weather extends Component {
   }
 
   renderList() {
-    if (typeof this.state.list !== 'undefined' && this.state.list !== null && this.state.list.length) {
+    if (typeof this.props.weather !== 'undefined' && this.props.weather !== null && this.props.weather.length) {
       return (
         <ul className="weather__list">
-          {this.state.list.map((item, key) => {
+          {this.props.weather.map((item, key) => {
             return (
               <li key={key}>
                 {this.constructor.formatTemperature(item.temp.min, item.temp.max)}
@@ -163,11 +169,11 @@ class Weather extends Component {
   render() {
     return (
       <div className="weather">
-        {this.state.city}
+        {this.props.weatherCity}
         {this.renderList()}
       </div>
     );
   }
 }
 
-export default Weather;
+export default connect(mapStateToProps, mapDispatchToProps)(Weather);

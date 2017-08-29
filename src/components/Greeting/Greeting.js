@@ -1,26 +1,25 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import moment from 'moment';
 
 import './Greeting.css';
 
+const mapStateToProps = (state) => {
+  return {
+    user: state.greeting,
+  };
+};
+
 class Greeting extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      user: 'Ryan',
-    }
-  }
-
   renderTime() {
     const hour = moment().get('hour');
 
     if (hour < 12) {
-      return `Good morning, ${this.state.user}`;
+      return `Good morning, ${this.props.user}`;
     } else if (hour < 18) {
-      return `Good afternoon, ${this.state.user}`;
+      return `Good afternoon, ${this.props.user}`;
     } else {
-      return `Good evening, ${this.state.user}`;
+      return `Good evening, ${this.props.user}`;
     }
   }
 
@@ -33,4 +32,4 @@ class Greeting extends Component {
   }
 }
 
-export default Greeting;
+export default connect(mapStateToProps, null)(Greeting);

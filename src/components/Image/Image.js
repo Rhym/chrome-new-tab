@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import classNames from 'classnames';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -15,7 +16,7 @@ class Image extends Component {
       authorLink: localStorage.getItem('ImageAuthorLink'),
       authorName: localStorage.getItem('ImageAuthorName'),
       cache: localStorage.getItem('ImageCache'),
-      isLoading: false,
+      isLoading: true,
       hasError: false,
     }
   }
@@ -81,7 +82,7 @@ class Image extends Component {
       authorLink: author.links.html,
       authorName: author.name,
       cache: now,
-    })
+    });
   }
 
   renderAuthor() {
@@ -97,12 +98,15 @@ class Image extends Component {
       return <p>Error retrieving data</p>
     }
 
-    if (this.state.isLoading) {
-      return null;
-    }
+    const classes = classNames('image', {
+      'image--loaded': !this.state.isLoading,
+    });
 
     return (
-      <div className="image" style={{backgroundImage: `url(${this.state.imageUrl})`}}>
+      <div
+        className={classes}
+        style={{backgroundImage: `url(${this.state.imageUrl})`}}
+      >
         {this.renderAuthor()}
       </div>
     );

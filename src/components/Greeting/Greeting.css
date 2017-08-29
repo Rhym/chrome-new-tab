@@ -1,6 +1,6 @@
 .greeting {
     position: relative;
-    color: #fff;
+    color: currentColor;
     font-size: 3vw;
-    text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.14);
+    text-shadow: inherit;
 }

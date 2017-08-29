@@ -2,8 +2,8 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
-    color: #fff;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.14);
+    color: currentColor;
+    text-shadow: inherit;
     text-align: right;
 }
 
