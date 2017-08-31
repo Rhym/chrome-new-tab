@@ -88,7 +88,7 @@ class Image extends Component {
   renderAuthor() {
     return (
       <div className="image__author">
-        Photo by <a href={this.state.authorLink} target="_blank" rel="noopener noreferrer">{this.state.authorName}</a> / <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer">Unsplash</a>
+        Photo by <a href={`${this.state.authorLink}?utm_source=ryanpotternz&utm_medium=referral&utm_campaign=api-credit`} target="_blank" rel="noopener noreferrer">{this.state.authorName}</a> / <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer">Unsplash</a>
       </div>
     );
   }

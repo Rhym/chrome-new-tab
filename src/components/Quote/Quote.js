@@ -40,11 +40,11 @@ class Quote extends Component {
     }
 
     const now = moment().format();
-    return moment(cache).isSame(now, 'hour');
+    return moment(cache).isSame(now, 'minute');
   }
 
   fetchQuoteData() {
-    // if (!this.isCacheActive()) {
+    if (!this.isCacheActive()) {
       const QUOTE_API = `https://www.reddit.com/r/${this.props.quoteSource}/hot/.json?count=1`;
       axios.get(QUOTE_API)
         .then(response => {
@@ -57,7 +57,7 @@ class Quote extends Component {
         .catch(err => {
           console.log(err);
         });
-    // }
+    }
   }
 
   render() {

@@ -101,10 +101,6 @@ class Weather extends Component {
     );
   }
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.fetchWeatherData();
   }
@@ -134,8 +130,6 @@ class Weather extends Component {
           const now = moment().format();
           const city = response.data.city.name;
           const list = response.data.list;
-
-          console.log(list);
 
           this.props.setWeatherCache(now);
           this.props.setWeatherCity(city);
