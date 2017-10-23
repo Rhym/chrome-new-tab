@@ -1,2 +1,2 @@
-Herp Derp
-=========
+Chrome New Tab App
+==================
