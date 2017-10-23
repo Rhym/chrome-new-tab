@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "New Tab App",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "incognito": "split",
   "chrome_url_overrides": {
     "newtab": "index.html"
