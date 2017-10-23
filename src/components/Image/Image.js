@@ -1,28 +1,36 @@
 import React, {Component} from 'react';
-import classNames from 'classnames';
+import {connect} from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 
+import {image, imageAuthor, imageAuthorLink, imageCache} from '../../actions/image';
 import './Image.css';
+import refreshIcon from './icons/refresh.svg';
 
 const UNSPLASH_APPLICATION_ID = 'eeeef2dfe82e6732dc0d437807298a7b66b62e11aeeed3d85d33c25dbe233fb2';
 
+const mapStateToProps = (state) => {
+  return {
+    author: state.imageAuthor,
+    authorLink: state.imageAuthorLink,
+    image: state.image,
+    cache: state.imageCache,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    clearCache: () => dispatch(imageCache(null)),
+    setImageAuthor: (string) => dispatch(imageAuthor(string)),
+    setImageAuthorLink: (string) => dispatch(imageAuthorLink(string)),
+    setCache: (string) => dispatch(imageCache(string)),
+    setImage: (string) => dispatch(image(string)),
+  };
+};
+
 class Image extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      imageUrl: localStorage.getItem('ImageUrl'),
-      authorLink: localStorage.getItem('ImageAuthorLink'),
-      authorName: localStorage.getItem('ImageAuthorName'),
-      cache: localStorage.getItem('ImageCache'),
-      isLoading: true,
-      hasError: false,
-    }
-  }
-
   componentDidMount() {
-    this.fetchImageData(`https://api.unsplash.com/photos/random?orientation=landscape&w=1920&h=1080&query=landscape&client_id=${UNSPLASH_APPLICATION_ID}`);
+    this.fetchImageData();
   }
 
   /**
@@ -31,7 +39,7 @@ class Image extends Component {
    * @returns {boolean}
    */
   isCacheActive() {
-    const cache = this.state.cache;
+    const cache = this.props.cache;
 
     // If there is no cache.
     if (typeof cache === 'undefined' || cache === null) {
@@ -42,22 +50,23 @@ class Image extends Component {
     return moment(cache).isSame(now, 'day');
   }
 
-  /**
-   * Get image from the API
-   *
-   * @param url
-   */
-  fetchImageData(url) {
-    if (!this.isCacheActive()) {
-      this.setState({isLoading: true});
+  refreshImage() {
+    console.log('Invalidating Image cache.');
+    this.props.clearCache();
+    this.fetchImageData();
+  }
 
-      axios.get(url)
+  /**
+   * @desc Get image from the API
+   */
+  fetchImageData() {
+    if (!this.isCacheActive()) {
+      axios.get(`https://api.unsplash.com/photos/random?orientation=landscape&w=1920&h=1080&query=landscape&client_id=${UNSPLASH_APPLICATION_ID}`)
         .then(response => {
           this.setImageFromData(response);
         })
         .catch(err => {
-          this.setState({hasError: true});
-          console.log(err)
+          console.log(err);
         });
     }
   }
@@ -71,46 +80,70 @@ class Image extends Component {
     const now = moment().format();
 
     // Set the local storage.
-    localStorage.setItem('ImageUrl', url);
-    localStorage.setItem('ImageAuthorName', author.name);
-    localStorage.setItem('ImageAuthorLink', author.links.html);
-    localStorage.setItem('ImageCache', now);
-
-    this.setState({
-      isLoading: false,
-      imageUrl: url,
-      authorLink: author.links.html,
-      authorName: author.name,
-      cache: now,
-    });
+    this.props.setImage(url);
+    this.props.setImageAuthor(author.name);
+    this.props.setImageAuthorLink(author.links.html);
+    this.props.setCache(now);
   }
 
   renderAuthor() {
-    return (
-      <div className="image__author">
-        Photo by <a href={`${this.state.authorLink}?utm_source=ryanpotternz&utm_medium=referral&utm_campaign=api-credit`} target="_blank" rel="noopener noreferrer">{this.state.authorName}</a> / <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer">Unsplash</a>
-      </div>
-    );
+    if (
+      typeof this.props.author !== 'undefined'
+      && this.props.author !== null
+      && this.props.author !== ''
+    ) {
+      return (
+        <div className="image__author">
+          Photo by&nbsp;
+          <a
+            href={`${this.props.authorLink}?utm_source=ryanpotternz&utm_medium=referral&utm_campaign=api-credit`}
+            target="_blank" rel="noopener noreferrer"
+          >
+            {this.props.author}
+          </a>
+          &nbsp;/&nbsp;
+          <a
+            href="https://unsplash.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Unsplash
+          </a>
+        </div>
+      );
+    }
+
+    return null;
   }
 
   render() {
-    if (this.state.hasError) {
-      return <p>Error retrieving data</p>
+    if (
+      typeof this.props.image !== 'undefined'
+      && this.props.image !== null
+      && this.props.image !== ''
+    ) {
+      return (
+        <div className="image" style={{backgroundImage: `url(${this.props.image})`}}>
+          <button
+            className="image__button"
+            onClick={() => {
+              this.refreshImage()
+            }}
+            title="Get a new background image"
+          >
+            <img
+              className="image__icon"
+              src={refreshIcon}
+              alt="Refresh"
+            />
+          </button>
+          {this.renderAuthor()}
+        </div>
+      );
     }
 
-    const classes = classNames('image', {
-      'image--loaded': !this.state.isLoading,
-    });
-
-    return (
-      <div
-        className={classes}
-        style={{backgroundImage: `url(${this.state.imageUrl})`}}
-      >
-        {this.renderAuthor()}
-      </div>
-    );
+    return null;
   }
 }
 
-export default Image;
+export default connect(mapStateToProps, mapDispatchToProps)(Image);

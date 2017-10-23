@@ -16,7 +16,7 @@ export function weatherCache(state = null, action) {
   }
 }
 
-export function weatherCity(state = 'London', action) {
+export function weatherCity(state = null, action) {
   switch (action.type) {
     case 'WEATHER_SET_CITY':
       return action.weatherCity;

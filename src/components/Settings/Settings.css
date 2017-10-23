@@ -1,21 +1,56 @@
 .settings {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.settings__heading {
+  margin: 0;
+}
+
+.settings__description {
+  margin-top: 0.5em;
+  font-size: smaller;
 }
 
 .settings__icon {
-    display: block;
-    width: 1rem;
-    height: 1rem;
-    cursor: pointer;
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
 }
 
 .settings__popup {
-    padding: 0.5rem;
-    background: rgba(0, 0, 0, 0.5);
-    position: absolute;
-    right: 0;
-    bottom: 1.5rem;
-    font-size: small;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  right: 0;
+  bottom: 1.5rem;
+  font-size: small;
+}
+
+.form__group + .form__group {
+  margin-top: 0.5em;
+}
+
+.form__group label + input {
+  margin-top: 0.25em;
+}
+
+label {
+  width: 100%;
+  display: block;
+  font-size: smaller;
+}
+
+input {
+  border: 1px solid #000;
+  padding: 0.5em;
+}
+
+input[type="submit"] {
+  border-width: 0;
+  color: rgba(255, 255, 255, 1);
+  background-color: #2196f3;
+  padding: 0.5em 1em;
 }

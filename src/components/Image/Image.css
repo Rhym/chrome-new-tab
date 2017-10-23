@@ -18,6 +18,22 @@
     height: 1px;
 }
 
+.image__button {
+  border-width: 0;
+  padding: 0;
+  background: none;
+  position: absolute;
+  bottom: 1rem;
+  right: 2.5rem;
+}
+
+.image__icon {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
 .image__author {
     position: absolute;
     bottom: 1rem;

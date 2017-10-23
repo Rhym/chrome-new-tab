@@ -26,6 +26,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    clearWeatherCache: () => dispatch(weatherCache(null)),
     setWeather: (list) => dispatch(weather(list)),
     setWeatherCache: (string) => dispatch(weatherCache(string)),
     setWeatherCity: (string) => dispatch(weatherCity(string)),
@@ -34,8 +35,7 @@ const mapDispatchToProps = (dispatch) => {
 
 class Weather extends Component {
   /**
-   * Return the correct icon based on the code parameter.
-   *
+   * @desc Return the correct icon based on the code parameter.
    * @param code
    * @returns {XML}
    */
@@ -82,8 +82,7 @@ class Weather extends Component {
   }
 
   /**
-   * Return the formatted temperature.
-   *
+   * @desc Return the formatted temperature.
    * @param min
    * @param max
    * @returns {XML}
@@ -102,12 +101,38 @@ class Weather extends Component {
   }
 
   componentDidMount() {
-    this.fetchWeatherData();
+    if (
+      typeof this.props.weatherCity !== 'undefined'
+      && this.props.weatherCity !== null
+      && this.props.weatherCity !== ''
+    ) {
+      this.fetchWeatherData();
+    }
   }
 
   /**
-   * Check if the cache is active (one day).
-   *
+   * @desc Invalidate the cache if there is a new setting.
+   * @param nextProps
+   */
+  componentWillUpdate(nextProps) {
+    if (this.props.weatherCity !== nextProps.weatherCity) {
+      console.log('invalidating weather cache');
+      this.props.clearWeatherCache();
+    }
+  }
+
+  /**
+   * @desc Retrieve quote if the source has changed.
+   * @param prevProps
+   */
+  componentDidUpdate(prevProps) {
+    if (this.props.weatherCity !== prevProps.weatherCity) {
+      this.fetchWeatherData();
+    }
+  }
+
+  /**
+   * @desc Check if the cache is active (one day).
    * @returns {boolean}
    */
   isCacheActive() {
@@ -122,9 +147,18 @@ class Weather extends Component {
     return moment(cache).isSame(now, 'hour');
   }
 
+  /**
+   * @desc Retrieve the weather data from the API
+   */
   fetchWeatherData() {
-    if (!this.isCacheActive()) {
+    if (
+      !this.isCacheActive()
+      && typeof this.props.weatherCity !== 'undefined'
+      && this.props.weatherCity !== null
+      && this.props.weatherCity !== ''
+    ) {
       const WEATHER_API = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${this.props.weatherCity}&mode=json&units=metric&cnt=7&appid=a24a174c4ceab5f6c8462cbf4b161d0e`;
+      console.log('Retrieving weather from: %s', WEATHER_API);
       axios.get(WEATHER_API)
         .then(response => {
           const now = moment().format();
@@ -141,6 +175,10 @@ class Weather extends Component {
     }
   }
 
+  /**
+   * @desc Return the list node
+   * @returns {*}
+   */
   renderList() {
     if (typeof this.props.weather !== 'undefined' && this.props.weather !== null && this.props.weather.length) {
       return (
@@ -161,12 +199,20 @@ class Weather extends Component {
   }
 
   render() {
-    return (
-      <div className="weather">
-        {this.props.weatherCity}
-        {this.renderList()}
-      </div>
-    );
+    if (
+      typeof this.props.weatherCity !== 'undefined'
+      && this.props.weatherCity !== null
+      && this.props.weatherCity !== ''
+    ) {
+      return (
+        <div className="weather">
+          {this.props.weatherCity}
+          {this.renderList()}
+        </div>
+      );
+    }
+
+    return null;
   }
 }
 

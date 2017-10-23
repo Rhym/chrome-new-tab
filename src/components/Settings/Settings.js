@@ -61,7 +61,10 @@ class Settings extends Component {
     this.props.setQuoteSource(this.state.quoteSource);
     this.props.setWeatherCity(this.state.weatherCity);
 
-    event.preventDefault();
+    // Close the settings form
+    this.handleToggleState();
+
+    event.preventDefault(!this.props.isActive);
   }
 
   handleToggleState() {
@@ -87,27 +90,41 @@ class Settings extends Component {
       return (
         <div className="settings__popup">
           <form onSubmit={this.handleSubmit}>
-            <label>
+            <h4 className="settings__heading">Settings</h4>
+            <p className="settings__description">Leave an input blank to disable it.</p>
+            <div className="form__group">
+              <label>Name</label>
               <input
                 type="text"
                 name="user"
-                value={this.state.user}
+                placeholder="Enter your name..."
+                value={this.state.user || ''}
                 onChange={this.handleInputChange}
               />
+            </div>
+            <div className="form__group">
+              <label>Subreddit</label>
               <input
                 type="text"
                 name="quoteSource"
-                value={this.state.quoteSource}
+                placeholder="Enter subreddit name..."
+                value={this.state.quoteSource || ''}
                 onChange={this.handleInputChange}
               />
+            </div>
+            <div className="form__group">
+              <label>City (Weather)</label>
               <input
                 type="text"
                 name="weatherCity"
-                value={this.state.weatherCity}
+                placeholder="Enter your city..."
+                value={this.state.weatherCity || ''}
                 onChange={this.handleInputChange}
               />
-            </label>
-            <input type="submit" value="Save"/>
+            </div>
+            <div className="form__group">
+              <input type="submit" value="Save"/>
+            </div>
           </form>
         </div>
       );

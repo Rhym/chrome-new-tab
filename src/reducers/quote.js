@@ -16,7 +16,7 @@ export function quoteCache(state = null, action) {
   }
 }
 
-export function quoteSource(state = 'showerthoughts', action) {
+export function quoteSource(state = null, action) {
   switch (action.type) {
     case 'QUOTE_SET_SOURCE':
       return action.quoteSource;

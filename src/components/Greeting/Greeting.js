@@ -24,11 +24,19 @@ class Greeting extends Component {
   }
 
   render() {
-    return (
-      <span className="greeting">
-        {this.renderTime()}
-      </span>
-    )
+    if (
+      typeof this.props.user !== 'undefined'
+      && this.props.user !== null
+      && this.props.user !== ''
+    ) {
+      return (
+        <span className="greeting">
+          {this.renderTime()}
+        </span>
+      )
+    }
+
+    return null;
   }
 }
 

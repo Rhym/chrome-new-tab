@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    clearQuoteCache: () => dispatch(quoteCache(null)),
     setQuote: (string) => dispatch(quote(string)),
     setCache: (string) => dispatch(quoteCache(string)),
   };
@@ -23,12 +24,38 @@ const mapDispatchToProps = (dispatch) => {
 
 class Quote extends Component {
   componentDidMount() {
-    this.fetchQuoteData();
+    if (
+      typeof this.props.quoteSource !== 'undefined'
+      && this.props.quoteSource !== null
+      && this.props.quoteSource !== ''
+    ) {
+      this.fetchQuoteData();
+    }
   }
 
   /**
-   * Check if the cache is active (one day).
-   *
+   * @desc Invalidate the cache if there is a new setting.
+   * @param nextProps
+   */
+  componentWillUpdate(nextProps) {
+    if (this.props.quoteSource !== nextProps.quoteSource) {
+      console.log('invalidating quote cache');
+      this.props.clearQuoteCache();
+    }
+  }
+
+  /**
+   * @desc Retrieve quote if the source has changed.
+   * @param prevProps
+   */
+  componentDidUpdate(prevProps) {
+    if (this.props.quoteSource !== prevProps.quoteSource) {
+      this.fetchQuoteData();
+    }
+  }
+
+  /**
+   * @desc Check if the cache is active (one day).
    * @returns {boolean}
    */
   isCacheActive() {
@@ -43,16 +70,30 @@ class Quote extends Component {
     return moment(cache).isSame(now, 'minute');
   }
 
+  /**
+   * @desc Retrieve the data from Reddit.
+   */
   fetchQuoteData() {
-    if (!this.isCacheActive()) {
-      const QUOTE_API = `https://www.reddit.com/r/${this.props.quoteSource}/hot/.json?count=1`;
+    if (
+      !this.isCacheActive()
+      && typeof this.props.quoteSource !== 'undefined'
+      && this.props.quoteSource !== null
+      && this.props.quoteSource !== ''
+    ) {
+      // Get 5 items in case the Subreddit has stickied posts.
+      const QUOTE_API = `https://www.reddit.com/r/${this.props.quoteSource}/hot/.json?count=5`;
+      console.log('Retrieving posts from: %s', QUOTE_API);
       axios.get(QUOTE_API)
         .then(response => {
           const now = moment().format();
-          const title = response.data.data.children[0].data.title;
-
-          this.props.setQuote(title);
-          this.props.setCache(now);
+          const items = response.data.data.children;
+          for (let i = 0; i < items.length; i += 1) {
+            if (items[i].data.stickied === false) {
+              this.props.setQuote(items[i].data.title);
+              this.props.setCache(now);
+              break;
+            }
+          }
         })
         .catch(err => {
           console.log(err);
@@ -61,7 +102,11 @@ class Quote extends Component {
   }
 
   render() {
-    if (typeof this.props.quote !== 'undefined' && this.props.quote !== null) {
+    if (
+      typeof this.props.quoteSource !== 'undefined'
+      && this.props.quoteSource !== null
+      && this.props.quoteSource !== ''
+    ) {
       return (
         <span className="quote">{this.props.quote}</span>
       );
