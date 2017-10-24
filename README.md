@@ -1,2 +1,9 @@
-Chrome New Tab App
-==================
+New Tab App
+===========
+
+Features:
+
+- Daily background
+- Weather
+- Subreddit hot post
+

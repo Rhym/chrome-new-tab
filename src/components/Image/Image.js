@@ -15,16 +15,17 @@ const mapStateToProps = (state) => {
     authorLink: state.imageAuthorLink,
     image: state.image,
     cache: state.imageCache,
+    category: state.imageCategory,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     clearCache: () => dispatch(imageCache(null)),
+    setImage: (string) => dispatch(image(string)),
     setImageAuthor: (string) => dispatch(imageAuthor(string)),
     setImageAuthorLink: (string) => dispatch(imageAuthorLink(string)),
     setCache: (string) => dispatch(imageCache(string)),
-    setImage: (string) => dispatch(image(string)),
   };
 };
 
@@ -61,7 +62,7 @@ class Image extends Component {
    */
   fetchImageData() {
     if (!this.isCacheActive()) {
-      axios.get(`https://api.unsplash.com/photos/random?orientation=landscape&w=1920&h=1080&query=landscape&client_id=${UNSPLASH_APPLICATION_ID}`)
+      axios.get(`https://api.unsplash.com/photos/random?orientation=landscape&w=1920&h=1080&query=${this.props.category}&client_id=${UNSPLASH_APPLICATION_ID}`)
         .then(response => {
           this.setImageFromData(response);
         })
@@ -123,7 +124,7 @@ class Image extends Component {
       && this.props.image !== ''
     ) {
       return (
-        <div className="image" style={{backgroundImage: `url(${this.props.image})`}}>
+        <div className="image" style={{ backgroundImage: `url(${this.props.image})` }}>
           <button
             className="image__button"
             onClick={() => {

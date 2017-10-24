@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
+import {imageCategory} from '../../actions/image';
 import {greeting} from '../../actions/greeting';
 import {quoteCache, quoteSource} from '../../actions/quote';
 import {settingsIsActive} from '../../actions/settings';
@@ -8,9 +9,42 @@ import {weatherCache, weatherCity} from '../../actions/weather';
 import './Settings.css';
 import settingsIcon from './icons/settings.svg';
 
+const imageCategories = [
+  'adventure',
+  'animals',
+  'beach',
+  'building',
+  'city',
+  'cloud',
+  'coast',
+  'desktop-background',
+  'flowers',
+  'fog',
+  'food',
+  'galaxy',
+  'hiking',
+  'landscape',
+  'mountain',
+  'nature',
+  'night',
+  'rain',
+  'shore',
+  'sky',
+  'space',
+  'sunset',
+  'stars',
+  'storm',
+  'texture',
+  'thunderstorm',
+  'travel',
+  'tree',
+  'wallpaper',
+];
+
 const mapStateToProps = (state) => {
   return {
     isActive: state.settingsIsActive,
+    imageCategory: state.imageCategory,
     user: state.greeting,
     quoteSource: state.quoteSource,
     weatherCity: state.weatherCity,
@@ -20,6 +54,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleActive: (bool) => dispatch(settingsIsActive(bool)),
+    setImageCategory: (string) => dispatch(imageCategory(string)),
     setGreeting: (string) => dispatch(greeting(string)),
     clearQuoteCache: () => dispatch(quoteCache(null)),
     setQuoteSource: (string) => dispatch(quoteSource(string)),
@@ -40,6 +75,7 @@ class Settings extends Component {
       user: this.props.user,
       quoteSource: this.props.quoteSource,
       weatherCity: this.props.weatherCity,
+      imageCategory: this.props.imageCategory,
     };
   }
 
@@ -60,6 +96,7 @@ class Settings extends Component {
     this.props.setGreeting(this.state.user);
     this.props.setQuoteSource(this.state.quoteSource);
     this.props.setWeatherCity(this.state.weatherCity);
+    this.props.setImageCategory(this.state.imageCategory);
 
     // Close the settings form
     this.handleToggleState();
@@ -101,6 +138,21 @@ class Settings extends Component {
                 value={this.state.user || ''}
                 onChange={this.handleInputChange}
               />
+            </div>
+            <div className="form__group">
+              <label>Background Category</label>
+              <select
+                name="imageCategory"
+                value={this.state.imageCategory || ''}
+                onChange={this.handleInputChange}
+              >
+                <option value="" disabled>-- Select --</option>
+                {
+                  imageCategories.map((item) => {
+                    return <option value={item}>{item}</option>
+                  })
+                }
+              </select>
             </div>
             <div className="form__group">
               <label>Subreddit</label>

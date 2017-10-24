@@ -1,3 +1,7 @@
+/**
+ * @param string
+ * @returns {{type: string, image: *}}
+ */
 export function image(string) {
   return {
     type: 'IMAGE_SET',
@@ -5,6 +9,10 @@ export function image(string) {
   };
 }
 
+/**
+ * @param string
+ * @returns {{type: string, imageAuthor: *}}
+ */
 export function imageAuthor(string) {
   return {
     type: 'IMAGE_AUTHOR_SET',
@@ -12,6 +20,10 @@ export function imageAuthor(string) {
   };
 }
 
+/**
+ * @param string
+ * @returns {{type: string, imageAuthorLink: *}}
+ */
 export function imageAuthorLink(string) {
   return {
     type: 'IMAGE_AUTHOR_LINK_SET',
@@ -19,9 +31,24 @@ export function imageAuthorLink(string) {
   };
 }
 
+/**
+ * @param string
+ * @returns {{type: string, imageCache: *}}
+ */
 export function imageCache(string) {
   return {
     type: 'IMAGE_SET_CACHE',
     imageCache: string
+  };
+}
+
+/**
+ * @param string
+ * @returns {{type: string, imageCategory: *}}
+ */
+export function imageCategory(string) {
+  return {
+    type: 'IMAGE_CATEGORY_SET',
+    imageCategory: string
   };
 }
