@@ -30,13 +30,47 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 class Image extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: false,
+    }
+  }
+
   componentDidMount() {
-    this.fetchImageData();
+    if (!this.isCacheActive()) {
+      this.fetchImageData();
+    }
   }
 
   /**
-   * Check if the cache is active (one day).
-   *
+   * @desc if the cache or image are different, then update the component.
+   * @param nextProps
+   * @param nextState
+   * @returns {boolean}
+   */
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      this.props.cache !== nextProps.cache
+      || this.props.image !== nextProps.image
+      || this.props.category !== nextProps.category
+      || this.state.loading !== nextState.loading
+    );
+  }
+
+  /**
+   * @desc If the image category changes, refresh the image.
+   * @param nextProps
+   */
+  componentWillUpdate(nextProps) {
+    if (this.props.category !== nextProps.category) {
+      this.refreshImage();
+    }
+  }
+
+  /**
+   * @desc Check if the cache is active (one day).
    * @returns {boolean}
    */
   isCacheActive() {
@@ -51,6 +85,9 @@ class Image extends Component {
     return moment(cache).isSame(now, 'day');
   }
 
+  /**
+   * @desc Invalidated the cache, and request a new image.
+   */
   refreshImage() {
     console.log('Invalidating Image cache.');
     this.props.clearCache();
@@ -61,7 +98,10 @@ class Image extends Component {
    * @desc Get image from the API
    */
   fetchImageData() {
-    if (!this.isCacheActive()) {
+    console.log('Retrieving image.');
+    this.setState({
+      loading: !this.state.loading,
+    }, () => {
       axios.get(`https://api.unsplash.com/photos/random?orientation=landscape&w=1920&h=1080&query=${this.props.category}&client_id=${UNSPLASH_APPLICATION_ID}`)
         .then(response => {
           this.setImageFromData(response);
@@ -69,7 +109,7 @@ class Image extends Component {
         .catch(err => {
           console.log(err);
         });
-    }
+    });
   }
 
   /**
@@ -85,6 +125,29 @@ class Image extends Component {
     this.props.setImageAuthor(author.name);
     this.props.setImageAuthorLink(author.links.html);
     this.props.setCache(now);
+
+    this.setState({
+      loading: !this.state.loading,
+    })
+  }
+
+  renderButton() {
+    return (
+      <button
+        className="image__button"
+        onClick={() => {
+          this.refreshImage()
+        }}
+        disabled={this.state.loading}
+        title="Get a new background image"
+      >
+        <img
+          className="image__icon"
+          src={refreshIcon}
+          alt="Refresh"
+        />
+      </button>
+    );
   }
 
   renderAuthor() {
@@ -125,19 +188,7 @@ class Image extends Component {
     ) {
       return (
         <div className="image" style={{ backgroundImage: `url(${this.props.image})` }}>
-          <button
-            className="image__button"
-            onClick={() => {
-              this.refreshImage()
-            }}
-            title="Get a new background image"
-          >
-            <img
-              className="image__icon"
-              src={refreshIcon}
-              alt="Refresh"
-            />
-          </button>
+          {this.renderButton()}
           {this.renderAuthor()}
         </div>
       );

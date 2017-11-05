@@ -72,6 +72,7 @@ class Settings extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
+      changed: false,
       user: this.props.user,
       quoteSource: this.props.quoteSource,
       weatherCity: this.props.weatherCity,
@@ -79,16 +80,25 @@ class Settings extends Component {
     };
   }
 
+  /**
+   * @desc Update the state to match the form values
+   * @param event
+   */
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
+      changed: true,
     });
   }
 
+  /**
+   * @desc Submit the form
+   * @param event
+   */
   handleSubmit(event) {
     this.props.clearQuoteCache();
     this.props.clearWeatherCache();
@@ -102,8 +112,16 @@ class Settings extends Component {
     this.handleToggleState();
 
     event.preventDefault(!this.props.isActive);
+
+    // Reset the form state to default.
+    this.setState({
+      changed: false,
+    })
   }
 
+  /**
+   * @desc Open and close the settings popup
+   */
   handleToggleState() {
     this.props.toggleActive(!this.props.isActive);
   }
@@ -125,59 +143,71 @@ class Settings extends Component {
   renderPopup() {
     if (this.props.isActive) {
       return (
-        <div className="settings__popup">
-          <form onSubmit={this.handleSubmit}>
-            <h4 className="settings__heading">Settings</h4>
-            <p className="settings__description">Leave an input blank to disable it.</p>
-            <div className="form__group">
-              <label>Name</label>
-              <input
-                type="text"
-                name="user"
-                placeholder="Enter your name..."
-                value={this.state.user || ''}
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div className="form__group">
-              <label>Background Category</label>
-              <select
-                name="imageCategory"
-                value={this.state.imageCategory || ''}
-                onChange={this.handleInputChange}
-              >
-                <option value="" disabled>-- Select --</option>
-                {
-                  imageCategories.map((item) => {
-                    return <option value={item}>{item}</option>
-                  })
-                }
-              </select>
-            </div>
-            <div className="form__group">
-              <label>Subreddit</label>
-              <input
-                type="text"
-                name="quoteSource"
-                placeholder="Enter subreddit name..."
-                value={this.state.quoteSource || ''}
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div className="form__group">
-              <label>City (Weather)</label>
-              <input
-                type="text"
-                name="weatherCity"
-                placeholder="Enter your city..."
-                value={this.state.weatherCity || ''}
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div className="form__group">
-              <input type="submit" value="Save"/>
-            </div>
-          </form>
+        <div>
+          <div
+            className="settings__overlay"
+            onClick={() => {
+              this.handleToggleState(false);
+            }}
+          />
+          <div className="settings__popup">
+            <form onSubmit={this.handleSubmit}>
+              <h4 className="settings__heading">Settings</h4>
+              <p className="settings__description">Leave an input blank to disable it.</p>
+              <div className="form__group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  name="user"
+                  placeholder="Enter your name..."
+                  value={this.state.user || ''}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              <div className="form__group">
+                <label>Background Category</label>
+                <select
+                  name="imageCategory"
+                  value={this.state.imageCategory || ''}
+                  onChange={this.handleInputChange}
+                >
+                  <option value="" disabled>-- Select --</option>
+                  {
+                    imageCategories.map((item, key) => {
+                      return <option key={key} value={item}>{item}</option>
+                    })
+                  }
+                </select>
+              </div>
+              <div className="form__group">
+                <label>Subreddit</label>
+                <input
+                  type="text"
+                  name="quoteSource"
+                  placeholder="Enter subreddit name..."
+                  value={this.state.quoteSource || ''}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              <div className="form__group">
+                <label>City (Weather)</label>
+                <input
+                  type="text"
+                  name="weatherCity"
+                  placeholder="Enter your city..."
+                  value={this.state.weatherCity || ''}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              <div className="form__group">
+                <input
+                  type="submit"
+                  value="Save"
+                  disabled={!this.state.changed}
+                />
+              </div>
+            </form>
+          </div>
         </div>
       );
     }
