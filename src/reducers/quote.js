@@ -7,6 +7,15 @@ export function quote(state = null, action) {
   }
 }
 
+export function quoteUrl(state = null, action) {
+  switch (action.type) {
+    case 'QUOTE_SET_URL':
+      return action.quoteUrl;
+    default:
+      return state;
+  }
+}
+
 export function quoteCache(state = null, action) {
   switch (action.type) {
     case 'QUOTE_SET_CACHE':

@@ -1,10 +1,11 @@
 .quote {
-    max-width: 50%;
-    text-align: center;
-    position: absolute;
-    bottom: 1rem;
-    color: currentColor;
-    line-height: 1.3;
-    font-size: small;
-    text-shadow: inherit;
+  max-width: 50%;
+  text-align: center;
+  position: absolute;
+  bottom: 1rem;
+  color: currentColor;
+  line-height: 1.3;
+  font-size: small;
+  text-shadow: inherit;
+  text-decoration: none;
 }

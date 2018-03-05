@@ -91,10 +91,10 @@ class Weather extends Component {
     return (
       <div>
         <span className="weather__temp weather__temp--low">
-          {Math.floor(min)}&deg;
+          L: {Math.floor(min)}&deg;
         </span>
         <span className="weather__temp weather__temp--high">
-          {Math.floor(max)}&deg;
+          H: {Math.floor(max)}&deg;
         </span>
       </div>
     );
@@ -157,7 +157,7 @@ class Weather extends Component {
       && this.props.weatherCity !== null
       && this.props.weatherCity !== ''
     ) {
-      const WEATHER_API = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${this.props.weatherCity}&mode=json&units=metric&cnt=7&appid=a24a174c4ceab5f6c8462cbf4b161d0e`;
+      const WEATHER_API = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${this.props.weatherCity}&mode=json&units=metric&cnt=2&appid=a24a174c4ceab5f6c8462cbf4b161d0e`;
       console.log('Retrieving weather from: %s', WEATHER_API);
       axios.get(WEATHER_API)
         .then(response => {
@@ -186,8 +186,9 @@ class Weather extends Component {
           {this.props.weather.map((item, key) => {
             return (
               <li key={key}>
-                {this.constructor.formatTemperature(item.temp.min, item.temp.max)}
                 {this.constructor.getIcon(item.weather[0].icon)}
+                <p>{key === 0 ? 'Today' : 'Tomorrow'}</p>
+                {this.constructor.formatTemperature(item.temp.min, item.temp.max)}
               </li>
             );
           })}
@@ -206,7 +207,6 @@ class Weather extends Component {
     ) {
       return (
         <div className="weather">
-          {this.props.weatherCity}
           {this.renderList()}
         </div>
       );

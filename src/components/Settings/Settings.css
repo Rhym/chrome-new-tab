@@ -5,7 +5,7 @@
 .settings {
   position: absolute;
   bottom: 1rem;
-  right: 1rem;
+  left: 1rem;
 }
 
 .settings__overlay {
@@ -36,9 +36,9 @@
 
 .settings__popup {
   padding: 0.5rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
   position: absolute;
-  right: 0;
+  left: 0;
   bottom: 1.5rem;
   font-size: small;
 }

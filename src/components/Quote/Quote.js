@@ -3,12 +3,13 @@ import {connect} from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 
-import {quote, quoteCache} from '../../actions/quote';
+import {quote, quoteCache, quoteUrl} from '../../actions/quote';
 import './Quote.css';
 
 const mapStateToProps = (state) => {
   return {
     quote: state.quote,
+    url: state.quoteUrl,
     quoteSource: state.quoteSource,
     quoteCache: state.quoteCache,
   };
@@ -18,6 +19,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     clearQuoteCache: () => dispatch(quoteCache(null)),
     setQuote: (string) => dispatch(quote(string)),
+    setQuoteUrl: (string) => dispatch(quoteUrl(string)),
     setCache: (string) => dispatch(quoteCache(string)),
   };
 };
@@ -87,9 +89,11 @@ class Quote extends Component {
         .then(response => {
           const now = moment().format();
           const items = response.data.data.children;
+
           for (let i = 0; i < items.length; i += 1) {
             if (items[i].data.stickied === false) {
               this.props.setQuote(items[i].data.title);
+              this.props.setQuoteUrl(items[i].data.url);
               this.props.setCache(now);
               break;
             }
@@ -108,7 +112,12 @@ class Quote extends Component {
       && this.props.quoteSource !== ''
     ) {
       return (
-        <span className="quote">{this.props.quote}</span>
+        <a
+          href={this.props.url}
+          className="quote"
+        >
+          {this.props.quote}
+        </a>
       );
     }
 
