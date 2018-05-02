@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 
-import {image, imageAuthor, imageAuthorLink, imageCache} from '../../actions/image';
+import { image, imageAuthor, imageAuthorLink, imageCache } from '../../actions/image';
 import './Image.css';
 import refreshIcon from './icons/refresh.svg';
 
@@ -126,9 +126,30 @@ class Image extends Component {
     this.props.setImageAuthorLink(author.links.html);
     this.props.setCache(now);
 
+    this.callDownloadEndpoint(data.data.links);
+
     this.setState({
       loading: !this.state.loading,
     })
+  }
+
+  /**
+   * @desc Send a get request to the Unsplash API to align with their new terms: https://medium.com/unsplash/unsplash-api-guidelines-triggering-a-download-c39b24e99e02
+   * @param urls
+   */
+  callDownloadEndpoint(urls) {
+    if (
+      typeof urls !== 'undefined'
+      && urls !== null
+      && urls.download_location !== 'undefined'
+      && urls.download_location !== null
+    ) {
+      const ENDPOINT = urls.download_location;
+      axios.get(`${ENDPOINT}?client_id=${UNSPLASH_APPLICATION_ID}`)
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 
   renderButton() {
