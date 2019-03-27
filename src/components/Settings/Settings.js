@@ -1,44 +1,70 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import {imageCategory} from '../../actions/image';
-import {greeting} from '../../actions/greeting';
-import {quoteCache, quoteSource} from '../../actions/quote';
-import {settingsIsActive} from '../../actions/settings';
-import {weatherCache, weatherCity} from '../../actions/weather';
+import { imageCategory } from '../../actions/image';
+import { greeting } from '../../actions/greeting';
+import { quoteCache, quoteSource } from '../../actions/quote';
+import { settingsIsActive } from '../../actions/settings';
+import { weatherCache, weatherCity } from '../../actions/weather';
 import './Settings.css';
 import settingsIcon from './icons/settings.svg';
 
 const imageCategories = [
-  'adventure',
-  'animals',
-  'beach',
-  'building',
-  'city',
-  'cloud',
-  'coast',
-  'desktop-background',
-  'flowers',
-  'fog',
-  'food',
-  'galaxy',
-  'hiking',
-  'landscape',
-  'mountain',
-  'nature',
-  'night',
-  'rain',
-  'shore',
-  'sky',
-  'space',
-  'sunset',
-  'stars',
-  'storm',
-  'texture',
-  'thunderstorm',
-  'travel',
-  'tree',
-  'wallpaper',
+  {
+    title: 'categories',
+    items: [
+      'adventure',
+      'animals',
+      'art',
+      'beach',
+      'building',
+      'city',
+      'cloud',
+      'coast',
+      'desktop-background',
+      'flowers',
+      'fog',
+      'food',
+      'galaxy',
+      'hiking',
+      'landscape',
+      'mountain',
+      'nature',
+      'night',
+      'rain',
+      'shore',
+      'sky',
+      'space',
+      'sunset',
+      'stars',
+      'storm',
+      'texture',
+      'thunderstorm',
+      'travel',
+      'tree',
+      'wallpaper',
+    ],
+  },
+  {
+    title: 'palettes',
+    items: [
+      'red',
+      'orange',
+      'yellow',
+      'green',
+      'blue',
+      'indigo',
+      'violet',
+      'white',
+      'black',
+    ],
+  },
+  {
+    title: 'misc',
+    items: [
+      'random',
+    ],
+  },
 ];
 
 const mapStateToProps = (state) => {
@@ -173,8 +199,17 @@ class Settings extends Component {
                 >
                   <option value="" disabled>-- Select --</option>
                   {
-                    imageCategories.map((item, key) => {
-                      return <option key={key} value={item}>{item}</option>
+                    imageCategories.map((item, itemIndex) => {
+                      return (
+                        <optgroup
+                          key={itemIndex}
+                          label={item.title}
+                        >
+                          {
+                            item.items.map((option, optionIndex) => <option key={optionIndex} value={option}>{option}</option>)
+                          }
+                        </optgroup>
+                      )
                     })
                   }
                 </select>
