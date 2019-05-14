@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
     image: state.image,
     cache: state.imageCache,
     category: state.imageCategory,
+    search: state.imageSearch,
   };
 };
 
@@ -55,6 +56,7 @@ class Image extends Component {
       this.props.cache !== nextProps.cache
       || this.props.image !== nextProps.image
       || this.props.category !== nextProps.category
+      || this.props.search !== nextProps.search
       || this.state.loading !== nextState.loading
     );
   }
@@ -64,7 +66,7 @@ class Image extends Component {
    * @param nextProps
    */
   componentWillUpdate(nextProps) {
-    if (this.props.category !== nextProps.category) {
+    if (this.props.category !== nextProps.category || this.props.search !== nextProps.search) {
       this.refreshImage();
     }
   }
@@ -102,7 +104,14 @@ class Image extends Component {
     this.setState({
       loading: !this.state.loading,
     }, () => {
-      axios.get(`https://api.unsplash.com/photos/random?orientation=landscape&w=1920&h=1080&query=${this.props.category}&client_id=${UNSPLASH_APPLICATION_ID}`)
+      const { category: CATEGORY, search: SEARCH } = this.props;
+
+      let query = CATEGORY;
+      if (SEARCH) {
+        query = SEARCH;
+      }
+
+      axios.get(`https://api.unsplash.com/photos/random?orientation=landscape&w=1920&h=1080&query=${query}&client_id=${UNSPLASH_APPLICATION_ID}`)
         .then(response => {
           this.setImageFromData(response);
         })

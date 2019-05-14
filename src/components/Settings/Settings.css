@@ -1,5 +1,6 @@
 :root {
-  --input-width: 138px;
+  --input-width: 100%;
+  --setting-width: 400px;
 }
 
 .settings {
@@ -41,15 +42,24 @@
   left: 0;
   bottom: 1.5rem;
   font-size: small;
+  width: var(--setting-width);
 }
 
-.form__group + .form__group {
+.form__group {
+  margin-top: 1.5em;
+}
+
+.input__group + .input__group {
   margin-top: 0.5em;
 }
 
 .form__group label + input,
 .form__group label + select {
   margin-top: 0.25em;
+}
+
+.form__group p {
+  font-size: smaller;
 }
 
 label {

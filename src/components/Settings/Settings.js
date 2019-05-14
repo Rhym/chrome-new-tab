@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { imageCategory } from '../../actions/image';
+import { imageCategory, imageSearch } from '../../actions/image';
 import { greeting } from '../../actions/greeting';
 import { quoteCache, quoteSource } from '../../actions/quote';
 import { settingsIsActive } from '../../actions/settings';
@@ -71,6 +71,7 @@ const mapStateToProps = (state) => {
   return {
     isActive: state.settingsIsActive,
     imageCategory: state.imageCategory,
+    imageSearch: state.imageSearch,
     user: state.greeting,
     quoteSource: state.quoteSource,
     weatherCity: state.weatherCity,
@@ -81,6 +82,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     toggleActive: (bool) => dispatch(settingsIsActive(bool)),
     setImageCategory: (string) => dispatch(imageCategory(string)),
+    setImageSearch: (string) => dispatch(imageSearch(string)),
     setGreeting: (string) => dispatch(greeting(string)),
     clearQuoteCache: () => dispatch(quoteCache(null)),
     setQuoteSource: (string) => dispatch(quoteSource(string)),
@@ -103,6 +105,7 @@ class Settings extends Component {
       quoteSource: this.props.quoteSource,
       weatherCity: this.props.weatherCity,
       imageCategory: this.props.imageCategory,
+      imageSearch: this.props.imageSearch,
     };
   }
 
@@ -133,6 +136,7 @@ class Settings extends Component {
     this.props.setQuoteSource(this.state.quoteSource);
     this.props.setWeatherCity(this.state.weatherCity);
     this.props.setImageCategory(this.state.imageCategory);
+    this.props.setImageSearch(this.state.imageSearch);
 
     // Close the settings form
     this.handleToggleState();
@@ -178,9 +182,11 @@ class Settings extends Component {
           />
           <div className="settings__popup">
             <form onSubmit={this.handleSubmit}>
-              <h4 className="settings__heading">Settings</h4>
+              <h2 className="settings__heading">Settings</h2>
               <p className="settings__description">Leave an input blank to disable it.</p>
               <div className="form__group">
+                <h4>Details</h4>
+                <p>Enter your name to be greeted based on the time of day.</p>
                 <label>Name</label>
                 <input
                   type="text"
@@ -191,30 +197,46 @@ class Settings extends Component {
                 />
               </div>
               <div className="form__group">
-                <label>Background Category</label>
-                <select
-                  name="imageCategory"
-                  value={this.state.imageCategory || ''}
-                  onChange={this.handleInputChange}
-                >
-                  <option value="" disabled>-- Select --</option>
-                  {
-                    imageCategories.map((item, itemIndex) => {
-                      return (
-                        <optgroup
-                          key={itemIndex}
-                          label={item.title}
-                        >
-                          {
-                            item.items.map((option, optionIndex) => <option key={optionIndex} value={option}>{option}</option>)
-                          }
-                        </optgroup>
-                      )
-                    })
-                  }
-                </select>
+                <h4>Background</h4>
+                <p>Select from one of our preset items, or enter your own search parameters for your background image.</p>
+                <div className="input__group">
+                  <label>Category</label>
+                  <select
+                    name="imageCategory"
+                    value={this.state.imageCategory || ''}
+                    onChange={this.handleInputChange}
+                  >
+                    <option value="" disabled>-- Select --</option>
+                    {
+                      imageCategories.map((item, itemIndex) => {
+                        return (
+                          <optgroup
+                            key={itemIndex}
+                            label={item.title}
+                          >
+                            {
+                              item.items.map((option, optionIndex) => <option key={optionIndex} value={option}>{option}</option>)
+                            }
+                          </optgroup>
+                        )
+                      })
+                    }
+                  </select>
+                </div>
+                <div className="input__group">
+                  <label>Search</label>
+                  <input
+                    type="text"
+                    name="imageSearch"
+                    placeholder="Enter your search term..."
+                    value={this.state.imageSearch || ''}
+                    onChange={this.handleInputChange}
+                  />
+                </div>
               </div>
               <div className="form__group">
+                <h4>Subreddit</h4>
+                <p>enter the name of your favorite subreddit to display the hottest post of the last hour in the bottom of the screen.</p>
                 <label>Subreddit</label>
                 <input
                   type="text"
@@ -225,7 +247,9 @@ class Settings extends Component {
                 />
               </div>
               <div className="form__group">
-                <label>City (Weather)</label>
+                <h4>Weather</h4>
+                <p>Enter your city to display today's and tomorrow's weather in the top right-hand of the screen.</p>
+                <label>City</label>
                 <input
                   type="text"
                   name="weatherCity"

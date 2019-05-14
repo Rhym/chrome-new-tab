@@ -52,3 +52,14 @@ export function imageCategory(string) {
     imageCategory: string
   };
 }
+
+/**
+ * @param string
+ * @returns {{type: string, imageCategory: *}}
+ */
+export function imageSearch(string) {
+  return {
+    type: 'IMAGE_SEARCH_SET',
+    imageSearch: string
+  };
+}

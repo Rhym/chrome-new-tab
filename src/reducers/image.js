@@ -67,3 +67,17 @@ export function imageCategory(state = 'landscape', action) {
       return state;
   }
 }
+
+/**
+ * @param state
+ * @param action
+ * @returns {*}
+ */
+export function imageSearch(state = '', action) {
+  switch (action.type) {
+    case 'IMAGE_SEARCH_SET':
+      return action.imageSearch;
+    default:
+      return state;
+  }
+}

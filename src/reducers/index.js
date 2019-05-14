@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import {greeting} from './greeting';
-import {image, imageAuthor, imageAuthorLink, imageCache, imageCategory} from './image';
+import {image, imageAuthor, imageAuthorLink, imageCache, imageCategory, imageSearch} from './image';
 import {quote, quoteCache, quoteSource, quoteUrl} from './quote';
 import {settingsIsActive} from './settings';
 import {todoIsActive, addTodo, toggleTodo} from './todo';
@@ -14,6 +14,7 @@ export default combineReducers({
   imageAuthorLink,
   imageCache,
   imageCategory,
+  imageSearch,
   quoteCache,
   quoteSource,
   quoteUrl,
