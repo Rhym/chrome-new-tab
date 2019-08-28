@@ -7,9 +7,9 @@ import { image, imageAuthor, imageAuthorLink, imageCache } from '../../actions/i
 import './Image.css';
 import refreshIcon from './icons/refresh.svg';
 
-const UNSPLASH_APPLICATION_ID = 'eeeef2dfe82e6732dc0d437807298a7b66b62e11aeeed3d85d33c25dbe233fb2';
+const UNSPLASH_APPLICATION_ID = process.env.REACT_APP_UNSPLASH_APPLICATION_ID;
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     author: state.imageAuthor,
     authorLink: state.imageAuthorLink,
@@ -20,13 +20,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     clearCache: () => dispatch(imageCache(null)),
-    setImage: (string) => dispatch(image(string)),
-    setImageAuthor: (string) => dispatch(imageAuthor(string)),
-    setImageAuthorLink: (string) => dispatch(imageAuthorLink(string)),
-    setCache: (string) => dispatch(imageCache(string)),
+    setImage: string => dispatch(image(string)),
+    setImageAuthor: string => dispatch(imageAuthor(string)),
+    setImageAuthorLink: string => dispatch(imageAuthorLink(string)),
+    setCache: string => dispatch(imageCache(string)),
   };
 };
 
@@ -36,7 +36,7 @@ class Image extends Component {
 
     this.state = {
       loading: false,
-    }
+    };
   }
 
   componentDidMount() {
@@ -53,11 +53,11 @@ class Image extends Component {
    */
   shouldComponentUpdate(nextProps, nextState) {
     return (
-      this.props.cache !== nextProps.cache
-      || this.props.image !== nextProps.image
-      || this.props.category !== nextProps.category
-      || this.props.search !== nextProps.search
-      || this.state.loading !== nextState.loading
+      this.props.cache !== nextProps.cache ||
+      this.props.image !== nextProps.image ||
+      this.props.category !== nextProps.category ||
+      this.props.search !== nextProps.search ||
+      this.state.loading !== nextState.loading
     );
   }
 
@@ -101,24 +101,30 @@ class Image extends Component {
    */
   fetchImageData() {
     console.log('Retrieving image.');
-    this.setState({
-      loading: !this.state.loading,
-    }, () => {
-      const { category: CATEGORY, search: SEARCH } = this.props;
+    this.setState(
+      {
+        loading: !this.state.loading,
+      },
+      () => {
+        const { category: CATEGORY, search: SEARCH } = this.props;
 
-      let query = CATEGORY;
-      if (SEARCH) {
-        query = SEARCH;
+        let query = CATEGORY;
+        if (SEARCH) {
+          query = SEARCH;
+        }
+
+        axios
+          .get(
+            `https://api.unsplash.com/photos/random?orientation=landscape&w=1920&h=1080&query=${query}&client_id=${UNSPLASH_APPLICATION_ID}`
+          )
+          .then(response => {
+            this.setImageFromData(response);
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
-
-      axios.get(`https://api.unsplash.com/photos/random?orientation=landscape&w=1920&h=1080&query=${query}&client_id=${UNSPLASH_APPLICATION_ID}`)
-        .then(response => {
-          this.setImageFromData(response);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    });
+    );
   }
 
   /**
@@ -139,7 +145,7 @@ class Image extends Component {
 
     this.setState({
       loading: !this.state.loading,
-    })
+    });
   }
 
   /**
@@ -148,16 +154,15 @@ class Image extends Component {
    */
   callDownloadEndpoint(urls) {
     if (
-      typeof urls !== 'undefined'
-      && urls !== null
-      && urls.download_location !== 'undefined'
-      && urls.download_location !== null
+      typeof urls !== 'undefined' &&
+      urls !== null &&
+      urls.download_location !== 'undefined' &&
+      urls.download_location !== null
     ) {
       const ENDPOINT = urls.download_location;
-      axios.get(`${ENDPOINT}?client_id=${UNSPLASH_APPLICATION_ID}`)
-        .catch(err => {
-          console.log(err);
-        });
+      axios.get(`${ENDPOINT}?client_id=${UNSPLASH_APPLICATION_ID}`).catch(err => {
+        console.log(err);
+      });
     }
   }
 
@@ -166,41 +171,34 @@ class Image extends Component {
       <button
         className="image__button"
         onClick={() => {
-          this.refreshImage()
+          this.refreshImage();
         }}
         disabled={this.state.loading}
         title="Get a new background image"
       >
-        <img
-          className="image__icon"
-          src={refreshIcon}
-          alt="Refresh"
-        />
+        <img className="image__icon" src={refreshIcon} alt="Refresh" />
       </button>
     );
   }
 
   renderAuthor() {
     if (
-      typeof this.props.author !== 'undefined'
-      && this.props.author !== null
-      && this.props.author !== ''
+      typeof this.props.author !== 'undefined' &&
+      this.props.author !== null &&
+      this.props.author !== ''
     ) {
       return (
         <div className="image__author">
           Photo by&nbsp;
           <a
             href={`${this.props.authorLink}?utm_source=ryanpotternz&utm_medium=referral&utm_campaign=api-credit`}
-            target="_blank" rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             {this.props.author}
           </a>
           &nbsp;/&nbsp;
-          <a
-            href="https://unsplash.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://unsplash.com/" target="_blank" rel="noopener noreferrer">
             Unsplash
           </a>
         </div>
@@ -212,9 +210,9 @@ class Image extends Component {
 
   render() {
     if (
-      typeof this.props.image !== 'undefined'
-      && this.props.image !== null
-      && this.props.image !== ''
+      typeof this.props.image !== 'undefined' &&
+      this.props.image !== null &&
+      this.props.image !== ''
     ) {
       return (
         <div className="image" style={{ backgroundImage: `url(${this.props.image})` }}>
@@ -228,4 +226,7 @@ class Image extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Image);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Image);

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 
-import {weather, weatherCache, weatherCity} from '../../actions/weather';
+import { weather, weatherCache, weatherCity } from '../../actions/weather';
 import './Weather.css';
 
 import clear from './icons/01d.svg';
@@ -16,7 +16,7 @@ import thunderStorm from './icons/11d.svg';
 import snow from './icons/13d.svg';
 import mist from './icons/50d.svg';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     weather: state.weather,
     weatherCache: state.weatherCache,
@@ -24,12 +24,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     clearWeatherCache: () => dispatch(weatherCache(null)),
-    setWeather: (list) => dispatch(weather(list)),
-    setWeatherCache: (string) => dispatch(weatherCache(string)),
-    setWeatherCity: (string) => dispatch(weatherCity(string)),
+    setWeather: list => dispatch(weather(list)),
+    setWeatherCache: string => dispatch(weatherCache(string)),
+    setWeatherCity: string => dispatch(weatherCity(string)),
   };
 };
 
@@ -78,7 +78,7 @@ class Weather extends Component {
         src = clear;
     }
 
-    return <img className="weather__icon" src={src} alt="Weather Icon"/>
+    return <img className="weather__icon" src={src} alt="Weather Icon" />;
   }
 
   /**
@@ -90,21 +90,17 @@ class Weather extends Component {
   static formatTemperature(min = 0, max = 0) {
     return (
       <div>
-        <span className="weather__temp weather__temp--low">
-          L: {Math.floor(min)}&deg;
-        </span>
-        <span className="weather__temp weather__temp--high">
-          H: {Math.floor(max)}&deg;
-        </span>
+        <span className="weather__temp weather__temp--low">L: {Math.floor(min)}&deg;</span>
+        <span className="weather__temp weather__temp--high">H: {Math.floor(max)}&deg;</span>
       </div>
     );
   }
 
   componentDidMount() {
     if (
-      typeof this.props.weatherCity !== 'undefined'
-      && this.props.weatherCity !== null
-      && this.props.weatherCity !== ''
+      typeof this.props.weatherCity !== 'undefined' &&
+      this.props.weatherCity !== null &&
+      this.props.weatherCity !== ''
     ) {
       this.fetchWeatherData();
     }
@@ -152,14 +148,15 @@ class Weather extends Component {
    */
   fetchWeatherData() {
     if (
-      !this.isCacheActive()
-      && typeof this.props.weatherCity !== 'undefined'
-      && this.props.weatherCity !== null
-      && this.props.weatherCity !== ''
+      !this.isCacheActive() &&
+      typeof this.props.weatherCity !== 'undefined' &&
+      this.props.weatherCity !== null &&
+      this.props.weatherCity !== ''
     ) {
       const WEATHER_API = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${this.props.weatherCity}&mode=json&units=metric&cnt=2&appid=a24a174c4ceab5f6c8462cbf4b161d0e`;
       console.log('Retrieving weather from: %s', WEATHER_API);
-      axios.get(WEATHER_API)
+      axios
+        .get(WEATHER_API)
         .then(response => {
           const now = moment().format();
           const city = response.data.city.name;
@@ -180,7 +177,11 @@ class Weather extends Component {
    * @returns {*}
    */
   renderList() {
-    if (typeof this.props.weather !== 'undefined' && this.props.weather !== null && this.props.weather.length) {
+    if (
+      typeof this.props.weather !== 'undefined' &&
+      this.props.weather !== null &&
+      this.props.weather.length
+    ) {
       return (
         <ul className="weather__list">
           {this.props.weather.map((item, key) => {
@@ -201,19 +202,18 @@ class Weather extends Component {
 
   render() {
     if (
-      typeof this.props.weatherCity !== 'undefined'
-      && this.props.weatherCity !== null
-      && this.props.weatherCity !== ''
+      typeof this.props.weatherCity !== 'undefined' &&
+      this.props.weatherCity !== null &&
+      this.props.weatherCity !== ''
     ) {
-      return (
-        <div className="weather">
-          {this.renderList()}
-        </div>
-      );
+      return <div className="weather">{this.renderList()}</div>;
     }
 
     return null;
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Weather);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Weather);

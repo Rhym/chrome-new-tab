@@ -15,8 +15,8 @@ export function addTodo(state = [], action) {
         {
           id: action.id,
           text: action.text,
-          completed: false
-        }
+          completed: false,
+        },
       ];
     default:
       return state;
@@ -27,9 +27,7 @@ export function toggleTodo(state = [], action) {
   switch (action.type) {
     case 'TOGGLE_TODO':
       return state.map(todo =>
-        (todo.id === action.id)
-          ? {...todo, completed: !todo.completed}
-          : todo
+        todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
       );
     default:
       return state;

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 
 import './Clock.css';
@@ -10,7 +10,7 @@ class Clock extends Component {
     this.state = {
       time: null,
       greeting: null,
-    }
+    };
   }
 
   /**
@@ -46,11 +46,7 @@ class Clock extends Component {
   }
 
   render() {
-    return (
-      <div className="clock">
-        {this.state.time}
-      </div>
-    );
+    return <div className="clock">{this.state.time}</div>;
   }
 }
 

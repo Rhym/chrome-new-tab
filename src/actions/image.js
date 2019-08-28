@@ -5,7 +5,7 @@
 export function image(string) {
   return {
     type: 'IMAGE_SET',
-    image: string
+    image: string,
   };
 }
 
@@ -16,7 +16,7 @@ export function image(string) {
 export function imageAuthor(string) {
   return {
     type: 'IMAGE_AUTHOR_SET',
-    imageAuthor: string
+    imageAuthor: string,
   };
 }
 
@@ -27,7 +27,7 @@ export function imageAuthor(string) {
 export function imageAuthorLink(string) {
   return {
     type: 'IMAGE_AUTHOR_LINK_SET',
-    imageAuthorLink: string
+    imageAuthorLink: string,
   };
 }
 
@@ -38,7 +38,7 @@ export function imageAuthorLink(string) {
 export function imageCache(string) {
   return {
     type: 'IMAGE_SET_CACHE',
-    imageCache: string
+    imageCache: string,
   };
 }
 
@@ -49,7 +49,7 @@ export function imageCache(string) {
 export function imageCategory(string) {
   return {
     type: 'IMAGE_CATEGORY_SET',
-    imageCategory: string
+    imageCategory: string,
   };
 }
 
@@ -60,6 +60,6 @@ export function imageCategory(string) {
 export function imageSearch(string) {
   return {
     type: 'IMAGE_SEARCH_SET',
-    imageSearch: string
+    imageSearch: string,
   };
 }

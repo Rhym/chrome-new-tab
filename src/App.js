@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import Clock from './components/Clock/Clock';
@@ -16,12 +16,12 @@ class App extends Component {
 
     return (
       <div className={classes}>
-        <Image/>
-        <Weather/>
-        <Clock/>
-        <Greeting/>
-        <Quote/>
-        <Settings/>
+        <Image />
+        <Weather />
+        <Clock />
+        <Greeting />
+        <Quote />
+        <Settings />
       </div>
     );
   }

@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import moment from 'moment';
 
 import './Greeting.css';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     user: state.greeting,
   };
@@ -25,19 +25,18 @@ class Greeting extends Component {
 
   render() {
     if (
-      typeof this.props.user !== 'undefined'
-      && this.props.user !== null
-      && this.props.user !== ''
+      typeof this.props.user !== 'undefined' &&
+      this.props.user !== null &&
+      this.props.user !== ''
     ) {
-      return (
-        <span className="greeting">
-          {this.renderTime()}
-        </span>
-      )
+      return <span className="greeting">{this.renderTime()}</span>;
     }
 
     return null;
   }
 }
 
-export default connect(mapStateToProps, null)(Greeting);
+export default connect(
+  mapStateToProps,
+  null
+)(Greeting);

@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 
-import {quote, quoteCache, quoteUrl} from '../../actions/quote';
+import { quote, quoteCache, quoteUrl } from '../../actions/quote';
 import './Quote.css';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     quote: state.quote,
     url: state.quoteUrl,
@@ -15,21 +15,21 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     clearQuoteCache: () => dispatch(quoteCache(null)),
-    setQuote: (string) => dispatch(quote(string)),
-    setQuoteUrl: (string) => dispatch(quoteUrl(string)),
-    setCache: (string) => dispatch(quoteCache(string)),
+    setQuote: string => dispatch(quote(string)),
+    setQuoteUrl: string => dispatch(quoteUrl(string)),
+    setCache: string => dispatch(quoteCache(string)),
   };
 };
 
 class Quote extends Component {
   componentDidMount() {
     if (
-      typeof this.props.quoteSource !== 'undefined'
-      && this.props.quoteSource !== null
-      && this.props.quoteSource !== ''
+      typeof this.props.quoteSource !== 'undefined' &&
+      this.props.quoteSource !== null &&
+      this.props.quoteSource !== ''
     ) {
       this.fetchQuoteData();
     }
@@ -77,15 +77,16 @@ class Quote extends Component {
    */
   fetchQuoteData() {
     if (
-      !this.isCacheActive()
-      && typeof this.props.quoteSource !== 'undefined'
-      && this.props.quoteSource !== null
-      && this.props.quoteSource !== ''
+      !this.isCacheActive() &&
+      typeof this.props.quoteSource !== 'undefined' &&
+      this.props.quoteSource !== null &&
+      this.props.quoteSource !== ''
     ) {
       // Get 5 items in case the Subreddit has stickied posts.
       const QUOTE_API = `https://www.reddit.com/r/${this.props.quoteSource}/hot/.json?count=5`;
       console.log('Retrieving posts from: %s', QUOTE_API);
-      axios.get(QUOTE_API)
+      axios
+        .get(QUOTE_API)
         .then(response => {
           const now = moment().format();
           const items = response.data.data.children;
@@ -107,15 +108,12 @@ class Quote extends Component {
 
   render() {
     if (
-      typeof this.props.quoteSource !== 'undefined'
-      && this.props.quoteSource !== null
-      && this.props.quoteSource !== ''
+      typeof this.props.quoteSource !== 'undefined' &&
+      this.props.quoteSource !== null &&
+      this.props.quoteSource !== ''
     ) {
       return (
-        <a
-          href={this.props.url}
-          className="quote"
-        >
+        <a href={this.props.url} target="_blank" rel="noreferrer noopener" className="quote">
           {this.props.quote}
         </a>
       );
@@ -123,7 +121,9 @@ class Quote extends Component {
 
     return null;
   }
-
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Quote);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Quote);

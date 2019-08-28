@@ -47,27 +47,15 @@ const imageCategories = [
   },
   {
     title: 'palettes',
-    items: [
-      'red',
-      'orange',
-      'yellow',
-      'green',
-      'blue',
-      'indigo',
-      'violet',
-      'white',
-      'black',
-    ],
+    items: ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'white', 'black'],
   },
   {
     title: 'misc',
-    items: [
-      'random',
-    ],
+    items: ['random'],
   },
 ];
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isActive: state.settingsIsActive,
     imageCategory: state.imageCategory,
@@ -78,16 +66,16 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    toggleActive: (bool) => dispatch(settingsIsActive(bool)),
-    setImageCategory: (string) => dispatch(imageCategory(string)),
-    setImageSearch: (string) => dispatch(imageSearch(string)),
-    setGreeting: (string) => dispatch(greeting(string)),
+    toggleActive: bool => dispatch(settingsIsActive(bool)),
+    setImageCategory: string => dispatch(imageCategory(string)),
+    setImageSearch: string => dispatch(imageSearch(string)),
+    setGreeting: string => dispatch(greeting(string)),
     clearQuoteCache: () => dispatch(quoteCache(null)),
-    setQuoteSource: (string) => dispatch(quoteSource(string)),
+    setQuoteSource: string => dispatch(quoteSource(string)),
     clearWeatherCache: () => dispatch(weatherCache(null)),
-    setWeatherCity: (string) => dispatch(weatherCity(string)),
+    setWeatherCity: string => dispatch(weatherCity(string)),
   };
 };
 
@@ -146,7 +134,7 @@ class Settings extends Component {
     // Reset the form state to default.
     this.setState({
       changed: false,
-    })
+    });
   }
 
   /**
@@ -198,7 +186,10 @@ class Settings extends Component {
               </div>
               <div className="form__group">
                 <h4>Background</h4>
-                <p>Select from one of our preset items, or enter your own search parameters for your background image.</p>
+                <p>
+                  Select from one of our preset items, or enter your own search parameters for your
+                  background image.
+                </p>
                 <div className="input__group">
                   <label>Category</label>
                   <select
@@ -206,21 +197,20 @@ class Settings extends Component {
                     value={this.state.imageCategory || ''}
                     onChange={this.handleInputChange}
                   >
-                    <option value="" disabled>-- Select --</option>
-                    {
-                      imageCategories.map((item, itemIndex) => {
-                        return (
-                          <optgroup
-                            key={itemIndex}
-                            label={item.title}
-                          >
-                            {
-                              item.items.map((option, optionIndex) => <option key={optionIndex} value={option}>{option}</option>)
-                            }
-                          </optgroup>
-                        )
-                      })
-                    }
+                    <option value="" disabled>
+                      -- Select --
+                    </option>
+                    {imageCategories.map((item, itemIndex) => {
+                      return (
+                        <optgroup key={itemIndex} label={item.title}>
+                          {item.items.map((option, optionIndex) => (
+                            <option key={optionIndex} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </optgroup>
+                      );
+                    })}
                   </select>
                 </div>
                 <div className="input__group">
@@ -236,7 +226,10 @@ class Settings extends Component {
               </div>
               <div className="form__group">
                 <h4>Subreddit</h4>
-                <p>enter the name of your favorite subreddit to display the hottest post of the last hour in the bottom of the screen.</p>
+                <p>
+                  enter the name of your favorite subreddit to display the hottest post of the last
+                  hour in the bottom of the screen.
+                </p>
                 <label>Subreddit</label>
                 <input
                   type="text"
@@ -248,7 +241,10 @@ class Settings extends Component {
               </div>
               <div className="form__group">
                 <h4>Weather</h4>
-                <p>Enter your city to display today's and tomorrow's weather in the top right-hand of the screen.</p>
+                <p>
+                  Enter your city to display today's and tomorrow's weather in the top right-hand of
+                  the screen.
+                </p>
                 <label>City</label>
                 <input
                   type="text"
@@ -259,11 +255,7 @@ class Settings extends Component {
                 />
               </div>
               <div className="form__group">
-                <input
-                  type="submit"
-                  value="Save"
-                  disabled={!this.state.changed}
-                />
+                <input type="submit" value="Save" disabled={!this.state.changed} />
               </div>
             </form>
           </div>
@@ -275,4 +267,7 @@ class Settings extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Settings);

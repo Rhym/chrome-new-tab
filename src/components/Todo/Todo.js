@@ -1,18 +1,18 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import {todoIsActive} from '../../actions/todo';
+import { todoIsActive } from '../../actions/todo';
 import './Todo.css';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isActive: state.todoIsActive,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    toggleActive: (bool) => dispatch(todoIsActive(bool)),
+    toggleActive: bool => dispatch(todoIsActive(bool)),
   };
 };
 
@@ -37,10 +37,7 @@ class Todo extends Component {
   render() {
     return (
       <div className="todo">
-        <button
-          className="todo__control"
-          onClick={this.handleToggleState}
-        >
+        <button className="todo__control" onClick={this.handleToggleState}>
           Todo
         </button>
         {this.renderPopup()}
@@ -58,9 +55,7 @@ class Todo extends Component {
               this.handleToggleState(false);
             }}
           />
-          <div className="todo__popup">
-            Hi
-          </div>
+          <div className="todo__popup">Hi</div>
         </div>
       );
     }
@@ -69,4 +64,7 @@ class Todo extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Todo);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Todo);
