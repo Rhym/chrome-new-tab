@@ -1,9 +1,8 @@
 {
   "manifest_version": 2,
   "name": "New Tab App",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "incognito": "split",
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "chrome_url_overrides": {
     "newtab": "index.html"
   }
