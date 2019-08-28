@@ -37,13 +37,15 @@ class Quote extends Component {
 
   /**
    * @desc Invalidate the cache if there is a new setting.
-   * @param nextProps
+   * @param prevProps
    */
-  componentWillUpdate(nextProps) {
-    if (this.props.quoteSource !== nextProps.quoteSource) {
+  getSnapshotBeforeUpdate(prevProps) {
+    if (this.props.quoteSource !== prevProps.quoteSource) {
       console.log('invalidating quote cache');
       this.props.clearQuoteCache();
     }
+
+    return null;
   }
 
   /**

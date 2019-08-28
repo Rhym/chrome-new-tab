@@ -63,12 +63,14 @@ class Image extends Component {
 
   /**
    * @desc If the image category changes, refresh the image.
-   * @param nextProps
+   * @param prevProps
    */
-  componentWillUpdate(nextProps) {
-    if (this.props.category !== nextProps.category || this.props.search !== nextProps.search) {
+  componentDidUpdate(prevProps) {
+    if (this.props.category !== prevProps.category || this.props.search !== prevProps.search) {
       this.refreshImage();
     }
+
+    return null;
   }
 
   /**

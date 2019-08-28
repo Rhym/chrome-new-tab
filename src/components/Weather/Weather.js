@@ -108,13 +108,15 @@ class Weather extends Component {
 
   /**
    * @desc Invalidate the cache if there is a new setting.
-   * @param nextProps
+   * @param prevProps
    */
-  componentWillUpdate(nextProps) {
-    if (this.props.weatherCity !== nextProps.weatherCity) {
+  getSnapshotBeforeUpdate(prevProps) {
+    if (this.props.weatherCity !== prevProps.weatherCity) {
       console.log('invalidating weather cache');
       this.props.clearWeatherCache();
     }
+
+    return null;
   }
 
   /**
