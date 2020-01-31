@@ -1,9 +1,16 @@
 {
   "manifest_version": 2,
-  "name": "New Tab App",
-  "version": "1.4.3",
+  "name": "New tab app",
+  "description": "Replace new tab page with a custom dashboard featuring weekly weather, and categorised daily backgrounds. New Tab page that makes your browser look swish as heck, and makes all the kids jelly.",
+  "version": "1.4.4",
+  "default_locale": "en",
   "incognito": "split",
   "chrome_url_overrides": {
     "newtab": "index.html"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   }
 }
