@@ -16,6 +16,8 @@ import thunderStorm from './icons/11d.svg';
 import snow from './icons/13d.svg';
 import mist from './icons/50d.svg';
 
+const WEATHER_APPLICATION_ID = process.env.WEATHER_APPLICATION_ID;
+
 const mapStateToProps = state => {
   return {
     weather: state.weather,
@@ -155,7 +157,7 @@ class Weather extends Component {
       this.props.weatherCity !== null &&
       this.props.weatherCity !== ''
     ) {
-      const WEATHER_API = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${this.props.weatherCity}&mode=json&units=metric&cnt=2&appid=a24a174c4ceab5f6c8462cbf4b161d0e`;
+      const WEATHER_API = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${this.props.weatherCity}&mode=json&units=metric&cnt=2&appid=${WEATHER_APPLICATION_ID}`;
       console.log('Retrieving weather from: %s', WEATHER_API);
       axios
         .get(WEATHER_API)
