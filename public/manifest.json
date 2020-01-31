@@ -3,7 +3,6 @@
   "name": "New tab app",
   "description": "Replace new tab page with a custom dashboard featuring weekly weather, and categorised daily backgrounds. New Tab page that makes your browser look swish as heck, and makes all the kids jelly.",
   "version": "1.4.4",
-  "default_locale": "en",
   "incognito": "split",
   "chrome_url_overrides": {
     "newtab": "index.html"
