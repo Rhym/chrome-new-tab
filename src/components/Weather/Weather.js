@@ -215,7 +215,4 @@ class Weather extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Weather);
+export default connect(mapStateToProps, mapDispatchToProps)(Weather);

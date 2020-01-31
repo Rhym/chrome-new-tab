@@ -36,7 +36,4 @@ class Greeting extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(Greeting);
+export default connect(mapStateToProps, null)(Greeting);

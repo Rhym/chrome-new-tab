@@ -125,7 +125,4 @@ class Quote extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Quote);
+export default connect(mapStateToProps, mapDispatchToProps)(Quote);

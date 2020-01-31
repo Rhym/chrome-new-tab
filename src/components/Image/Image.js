@@ -228,7 +228,4 @@ class Image extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Image);
+export default connect(mapStateToProps, mapDispatchToProps)(Image);
